@@ -10,140 +10,161 @@ class CadastroPage extends StatefulWidget {
 
 // Estado da página de cadastro
 class _CadastroPageState extends State<CadastroPage> {
-  // Controladores para os campos de entrada
-  final _nomeController =
-      TextEditingController(); // Controla o texto do campo "Nome"
-  final _emailController =
-      TextEditingController(); // Controla o texto do campo "Email"
-  final _telefoneController =
-      TextEditingController(); // Controla o texto do campo "Telefone"
-  final _enderecoController =
-      TextEditingController(); // Controla o texto do campo "Endereço"
+  final _nomeController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _telefoneController = TextEditingController();
+  final _enderecoController = TextEditingController();
 
-  String? _generoSelecionado; // Armazena o gênero selecionado pelo usuário
-  final List<Map<String, String?>> _cadastros =
-      []; // Lista para armazenar os cadastros
+  String? _generoSelecionado;
+  final ValueNotifier<List<Map<String, String?>>> _cadastrosNotifier =
+      ValueNotifier([]);
+
+  @override
+  void dispose() {
+    _cadastrosNotifier.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cadastro'), // Título da página
+        title: const Text('Cadastro'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0), // Espaço ao redor do conteúdo
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Campo de entrada para o nome
-            TextFormField(
-              controller: _nomeController, // Controlador do campo
-              decoration:
-                  const InputDecoration(labelText: 'Nome'), // Texto do rótulo
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextFormField(
+                controller: _nomeController,
+                decoration: InputDecoration(
+                  labelText: 'Nome',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                ),
+              ),
             ),
-            // Campo de entrada para o email
-            TextFormField(
-              controller: _emailController, // Controlador do campo
-              decoration:
-                  const InputDecoration(labelText: 'Email'), // Texto do rótulo
-              keyboardType:
-                  TextInputType.emailAddress, // Tipo de teclado para email
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                ),
+                keyboardType: TextInputType.emailAddress,
+              ),
             ),
-            // Campo de entrada para o telefone
-            TextFormField(
-              controller: _telefoneController, // Controlador do campo
-              decoration: const InputDecoration(
-                  labelText: 'Telefone'), // Texto do rótulo
-              keyboardType:
-                  TextInputType.phone, // Tipo de teclado para telefone
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextFormField(
+                controller: _telefoneController,
+                decoration: InputDecoration(
+                  labelText: 'Telefone',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                ),
+                keyboardType: TextInputType.phone,
+              ),
             ),
-            // Campo de entrada para o endereço
-            TextFormField(
-              controller: _enderecoController, // Controlador do campo
-              decoration: const InputDecoration(
-                  labelText: 'Endereço'), // Texto do rótulo
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextFormField(
+                controller: _enderecoController,
+                decoration: InputDecoration(
+                  labelText: 'Endereço',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 20), // Espaço vertical
-            const Text('Gênero:'), // Texto para seleção de gênero
+            const SizedBox(height: 20),
+            const Text('Gênero:'),
             Row(
               children: [
-                // Opção de rádio para "Masculino"
                 Expanded(
                   child: RadioListTile<String>(
-                    title: const Text('Masculino'), // Texto da opção
-                    value: 'masculino', // Valor associado à opção
-                    groupValue: _generoSelecionado, // Valor do grupo de opções
+                    title: const Text('Masculino'),
+                    value: 'masculino',
+                    groupValue: _generoSelecionado,
                     onChanged: (value) {
                       setState(() {
-                        _generoSelecionado =
-                            value; // Atualiza o valor selecionado
+                        _generoSelecionado = value;
                       });
                     },
                   ),
                 ),
-                // Opção de rádio para "Feminino"
                 Expanded(
                   child: RadioListTile<String>(
-                    title: const Text('Feminino'), // Texto da opção
-                    value: 'feminino', // Valor associado à opção
-                    groupValue: _generoSelecionado, // Valor do grupo de opções
+                    title: const Text('Feminino'),
+                    value: 'feminino',
+                    groupValue: _generoSelecionado,
                     onChanged: (value) {
                       setState(() {
-                        _generoSelecionado =
-                            value; // Atualiza o valor selecionado
+                        _generoSelecionado = value;
                       });
                     },
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 20), // Espaço vertical
-            // Botão para salvar os dados
-            ElevatedButton(
-              onPressed: () {
-                // Verifica se todos os campos estão preenchidos
-                if (_nomeController.text.isNotEmpty &&
-                    _emailController.text.isNotEmpty &&
-                    _telefoneController.text.isNotEmpty &&
-                    _enderecoController.text.isNotEmpty &&
-                    _generoSelecionado != null) {
-                  setState(() {
-                    // Adiciona os dados à lista de cadastros
-                    _cadastros.add({
-                      'nome': _nomeController.text,
-                      'email': _emailController.text,
-                      'telefone': _telefoneController.text,
-                      'endereco': _enderecoController.text,
-                      'genero': _generoSelecionado,
-                    });
-                    // Limpa os campos de entrada
-                    _nomeController.clear();
-                    _emailController.clear();
-                    _telefoneController.clear();
-                    _enderecoController.clear();
-                    _generoSelecionado = null;
-                  });
-                } else {
-                  // Mostra uma mensagem de erro se algum campo estiver vazio
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Por favor, preencha todos os campos.'),
-                    ),
-                  );
-                }
-              },
-              child: const Text('Salvar'), // Texto do botão
-            ),
-            // Botão para ver a lista de cadastros
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CadastrosPage(cadastros: _cadastros),
-                  ),
-                );
-              },
-              child: const Text('Ver Cadastros'), // Texto do botão
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    if (_nomeController.text.isNotEmpty &&
+                        _emailController.text.isNotEmpty &&
+                        _telefoneController.text.isNotEmpty &&
+                        _enderecoController.text.isNotEmpty &&
+                        _generoSelecionado != null) {
+                      setState(() {
+                        _cadastrosNotifier.value.add({
+                          'nome': _nomeController.text,
+                          'email': _emailController.text,
+                          'telefone': _telefoneController.text,
+                          'endereco': _enderecoController.text,
+                          'genero': _generoSelecionado,
+                        });
+                        _nomeController.clear();
+                        _emailController.clear();
+                        _telefoneController.clear();
+                        _enderecoController.clear();
+                        _generoSelecionado = null;
+                      });
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Por favor, preencha todos os campos.'),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('Salvar'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CadastrosPage(
+                          cadastrosNotifier: _cadastrosNotifier,
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text('Ver Cadastros'),
+                ),
+              ],
             ),
           ],
         ),
@@ -154,41 +175,82 @@ class _CadastroPageState extends State<CadastroPage> {
 
 // Página para exibir a lista de cadastros
 class CadastrosPage extends StatelessWidget {
-  final List<Map<String, String?>>
-      cadastros; // Lista de cadastros a ser exibida
+  final ValueNotifier<List<Map<String, String?>>> cadastrosNotifier;
 
-  const CadastrosPage({super.key, required this.cadastros});
+  const CadastrosPage({super.key, required this.cadastrosNotifier});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista de Cadastros'), // Título da página
+        title: const Text('Lista de Cadastros'),
       ),
-      body: ListView.builder(
-        itemCount: cadastros.length, // Número de itens na lista
-        itemBuilder: (context, index) {
-          final cadastro = cadastros[index]; // Dados do cadastro atual
-          return Card(
-            margin: const EdgeInsets.all(8.0), // Margem ao redor do cartão
-            child: ListTile(
-              leading: Icon(
-                // Ícone baseado no gênero
-                cadastro['genero'] == 'masculino' ? Icons.male : Icons.female,
-              ),
-              title: Text(cadastro['nome'] ?? ''), // Nome do cadastro
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                      'Email: ${cadastro['email'] ?? ''}'), // Email do cadastro
-                  Text(
-                      'Telefone: ${cadastro['telefone'] ?? ''}'), // Telefone do cadastro
-                  Text(
-                      'Endereço: ${cadastro['endereco'] ?? ''}'), // Endereço do cadastro
-                ],
-              ),
-            ),
+      body: ValueListenableBuilder<List<Map<String, String?>>>(
+        valueListenable: cadastrosNotifier,
+        builder: (context, cadastros, child) {
+          return ListView.builder(
+            itemCount: cadastros.length,
+            itemBuilder: (context, index) {
+              final cadastro = cadastros[index];
+              return Card(
+                margin: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: AssetImage(
+                      cadastro['genero'] == 'masculino'
+                          ? 'assets/images/masculino.png'
+                          : 'assets/images/feminino.png',
+                    ),
+                  ),
+                  title: Text(cadastro['nome'] ?? ''),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Email: ${cadastro['email'] ?? ''}'),
+                      Text('Telefone: ${cadastro['telefone'] ?? ''}'),
+                      Text('Endereço: ${cadastro['endereco'] ?? ''}'),
+                    ],
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      // Confirma a exclusão
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Excluir Cadastro'),
+                          content: const Text(
+                              'Tem certeza de que deseja excluir este cadastro?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancelar'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Fecha o diálogo
+                                cadastrosNotifier.value.removeAt(index);
+                                cadastrosNotifier
+                                    .notifyListeners(); // Notifica a mudança
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Cadastro excluído com sucesso.'),
+                                  ),
+                                );
+                              },
+                              child: const Text('Excluir'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
           );
         },
       ),
