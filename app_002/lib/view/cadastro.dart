@@ -13,7 +13,7 @@ class _CadastroPageState extends State<CadastroPage> {
   final _nomeController = TextEditingController();
   final _emailController = TextEditingController();
   final _telefoneController = TextEditingController();
-  final _enderecoController = TextEditingController();
+  final _senhaController = TextEditingController();
 
   String? _generoSelecionado;
   final ValueNotifier<List<Map<String, String?>>> _cadastrosNotifier =
@@ -32,12 +32,12 @@ class _CadastroPageState extends State<CadastroPage> {
         title: const Text('Cadastro'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(14.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 6.0),
               child: TextFormField(
                 controller: _nomeController,
                 decoration: InputDecoration(
@@ -49,7 +49,7 @@ class _CadastroPageState extends State<CadastroPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 6.0),
               child: TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(
@@ -62,7 +62,7 @@ class _CadastroPageState extends State<CadastroPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 6.0),
               child: TextFormField(
                 controller: _telefoneController,
                 decoration: InputDecoration(
@@ -75,18 +75,19 @@ class _CadastroPageState extends State<CadastroPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 6.0),
               child: TextFormField(
-                controller: _enderecoController,
+                controller: _senhaController, // Campo de senha
                 decoration: InputDecoration(
-                  labelText: 'Endereço',
+                  labelText: 'Senha',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
+                obscureText: true, // Oculta o texto
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             const Text('Gênero:'),
             Row(
               children: [
@@ -116,7 +117,7 @@ class _CadastroPageState extends State<CadastroPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -125,20 +126,20 @@ class _CadastroPageState extends State<CadastroPage> {
                     if (_nomeController.text.isNotEmpty &&
                         _emailController.text.isNotEmpty &&
                         _telefoneController.text.isNotEmpty &&
-                        _enderecoController.text.isNotEmpty &&
+                        _senhaController.text.isNotEmpty && // Valida a senha
                         _generoSelecionado != null) {
                       setState(() {
                         _cadastrosNotifier.value.add({
                           'nome': _nomeController.text,
                           'email': _emailController.text,
                           'telefone': _telefoneController.text,
-                          'endereco': _enderecoController.text,
+                          'senha': _senhaController.text, // Armazena a senha
                           'genero': _generoSelecionado,
                         });
                         _nomeController.clear();
                         _emailController.clear();
                         _telefoneController.clear();
-                        _enderecoController.clear();
+                        _senhaController.clear(); // Limpa o campo senha
                         _generoSelecionado = null;
                       });
                     } else {
@@ -208,11 +209,11 @@ class CadastrosPage extends StatelessWidget {
                     children: [
                       Text('Email: ${cadastro['email'] ?? ''}'),
                       Text('Telefone: ${cadastro['telefone'] ?? ''}'),
-                      Text('Endereço: ${cadastro['endereco'] ?? ''}'),
+                      Text('Senha: ${cadastro['senha'] ?? ''}'),
                     ],
                   ),
                   trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
+                    icon: const Icon(Icons.delete, color: Colors.blueGrey),
                     onPressed: () {
                       // Confirma a exclusão
                       showDialog(
